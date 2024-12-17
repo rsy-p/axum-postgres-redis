@@ -34,12 +34,18 @@ fn init_tracing() {
 
 async fn init_db(config: &Config) -> anyhow::Result<DBPool> {
     let manager = PostgresConnectionManager::new_from_stringlike(&config.database_url, NoTls)?;
-    let pool = Pool::builder().build(manager).await?;
+    let pool = Pool::builder()
+        .max_size(config.max_db_poll_size)
+        .build(manager)
+        .await?;
     Ok(pool)
 }
 
 async fn init_redis(config: &Config) -> anyhow::Result<RedisPool> {
     let manager = RedisConnectionManager::new(&*config.redis_url)?;
-    let pool = Pool::builder().build(manager).await?;
+    let pool = Pool::builder()
+        .max_size(config.max_redis_poll_size)
+        .build(manager)
+        .await?;
     Ok(pool)
 }

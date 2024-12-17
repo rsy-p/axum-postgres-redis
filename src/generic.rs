@@ -31,8 +31,11 @@ pub struct Config {
     pub database_url: String,
 
     #[clap(long, env, default_value = "10")]
-    pub db_max_connections: u32,
+    pub max_db_poll_size: u32,
 
     #[clap(long, env)]
     pub redis_url: String,
+
+    #[clap(long, env, default_value = "10")]
+    pub max_redis_poll_size: u32,
 }
